@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "type-in-pl"
+version = "0.1.0"
+description = "Scrap and generate the book"
+authors = ["seoh <devthewild@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+EbookLib = "^0.17.1"
+beautifulsoup4 = "^4.11.1"
+requests = "^2.27.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+app = "type_in_pl.app:main"
