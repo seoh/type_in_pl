@@ -22,9 +22,34 @@ def main():
 
   paired = list(map(
     lambda p: (
-      list(map(lambda c: c.text.replace('\xa0', ' '), p.contents)), # title: List[str]
-      p.contents[-1].attrs.get('href')),                            # href: str | None
-    ps))                                                            # -> List[(List[str], str | None)]
+      ''.join(map(lambda c: c.text.replace('\xa0', ' '), p.contents)),  # title: str
+      p.contents[-1].attrs.get('href')),                                # href: str | None
+    ps))                                                                # -> List[(str, str | None)]
 
-  for p in paired:
-    print(p)
+  def iter(acc, p):
+    title, href = p
+    depth = (len(title) - len(title.lstrip())) // 4
+
+    next = {
+      'title': title,
+      'link': href,
+      'children': [],
+      'depth': depth + 1
+    }
+
+    if depth == 0:
+      acc.append(next)
+    elif depth > 0:
+      target = acc
+      try:
+        while depth > 0:
+          target = target[-1]['children']
+          depth = depth - 1
+        target.append(next)
+      except Exception as e:
+        print('error', p, repr(e))
+
+    return acc
+
+  import pprint
+  pprint.pprint(reduce(iter, paired, []))
